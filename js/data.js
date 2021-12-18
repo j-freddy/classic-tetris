@@ -1,3 +1,5 @@
+// See for details: https://tetris.fandom.com/wiki/Tetris_(NES,_Nintendo)
+
 const _DATA = {
   "fps": 60,
   "grid": {
@@ -43,5 +45,12 @@ const _DATA = {
     // https://yeun.github.io/open-color/
     "gridColour": "#212529",
     "pieceColours": ["#fff", "#be4bdb"]
+  },
+  "controls": {
+    // Event codes
+    "rotateClockwise": "KeyX",
+    "rotateAntiClockwise": "KeyZ",
+    "moveLeft": "ArrowLeft",
+    "moveRight": "ArrowRight"
   }
 }

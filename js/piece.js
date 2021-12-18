@@ -12,6 +12,18 @@ class Piece {
     return this.data[this.rotation];
   }
 
+  rotateClockwise() {
+    this.rotation++;
+    this.rotation %= 4;
+  }
+
+  rotateAntiClockwise() {
+    this.rotation--;
+    if (this.rotation == -1) {
+      this.rotation = 3;
+    }
+  }
+
   outOfBounds(grid) {
     let shape = this.getShape();
 
@@ -55,6 +67,55 @@ class Piece {
 
     if (this.outOfBounds(grid) || this.collideWithGrid(grid)) {
       this.row--;
+      return false;
+    }
+
+    return true;
+  }
+
+  // Moves left and returns true if possible, otherwise returns false
+  tryMoveLeft(grid) {
+    this.column--;
+
+    if (this.outOfBounds(grid) || this.collideWithGrid(grid)) {
+      this.column++;
+      return false;
+    }
+
+    return true;
+  }
+
+  // Moves right and returns true if possible, otherwise returns false
+  tryMoveRight(grid) {
+    this.column++;
+
+    if (this.outOfBounds(grid) || this.collideWithGrid(grid)) {
+      this.column--;
+      return false;
+    }
+
+    return true;
+  }
+
+  // Rotates clockwise and returns true if possible, otherwise returns false
+  tryRotateClockwise(grid) {
+    this.rotateClockwise();
+
+    if (this.outOfBounds(grid) || this.collideWithGrid(grid)) {
+      this.rotateAntiClockwise();
+      return false;
+    }
+
+    return true;
+  }
+
+  // Rotates anti-clockwise and returns true if possible, otherwise returns
+  // false
+  tryRotateAntiClockwise(grid) {
+    this.rotateAntiClockwise();
+
+    if (this.outOfBounds(grid) || this.collideWithGrid(grid)) {
+      this.rotateClockwise();
       return false;
     }
 

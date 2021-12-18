@@ -3,7 +3,8 @@ class Game {
     this.fps = _DATA.fps;
     this.nextPieceDelay = _DATA.delay.nextPiece;
     this.grid = new Grid();
-    this.currentPiece = new Piece(PieceID.T);
+    this.currentPiece = this.getRandomPiece();
+    this.nextPiece = this.getRandomPiece();
     this.frameCount = 0;
     this.spawnNextPiece = false;
     // Delay to spawn next piece
@@ -12,6 +13,11 @@ class Game {
 
   getGridData() {
     return this.grid.getDataWithCurrentPiece(this.currentPiece);
+  }
+
+  getRandomPiece() {
+    const sack = [PieceID.T, PieceID.J, PieceID.Z, PieceID.O];
+    return new Piece(sack[Math.floor(Math.random() * sack.length)]);
   }
 
   tryMoveCurrentPieceDown() {
@@ -57,7 +63,8 @@ class Game {
       if (this.frameDelay > 0) {
         this.frameDelay--;
       } else {
-        this.currentPiece = new Piece(PieceID.T);
+        this.currentPiece = this.nextPiece;
+        this.nextPiece = this.getRandomPiece();
         this.spawnNextPiece = false;
       }
     }

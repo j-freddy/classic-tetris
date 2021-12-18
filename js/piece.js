@@ -14,13 +14,13 @@ class Piece {
 
   rotateClockwise() {
     this.rotation++;
-    this.rotation %= 4;
+    this.rotation %= this.data.length;
   }
 
   rotateAntiClockwise() {
     this.rotation--;
     if (this.rotation == -1) {
-      this.rotation = 3;
+      this.rotation += this.data.length;
     }
   }
 

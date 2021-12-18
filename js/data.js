@@ -1,10 +1,17 @@
-// See for details: https://tetris.fandom.com/wiki/Tetris_(NES,_Nintendo)
+/*
+  See for details: https://tetris.fandom.com/wiki/Tetris_(NES,_Nintendo)
+*/
 
 const _DATA = {
-  "fps": 60,
   "grid": {
     "numRows": 20,
     "numColumns": 10
+  },
+  "fps": 60,
+  "delay": {
+    // Inaccurate: see https://tetris.fandom.com/wiki/Tetris_(NES,_Nintendo)
+    "nextPiece": 10,
+    "lineClear": 20
   },
   "piece": {
     "t": {

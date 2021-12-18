@@ -1,8 +1,13 @@
 class Game {
   constructor() {
+    this.fps = _DATA.fps;
+    this.nextPieceDelay = _DATA.delay.nextPiece;
     this.grid = new Grid();
     this.currentPiece = new Piece(PieceID.T);
     this.frameCount = 0;
+    this.spawnNextPiece = false;
+    // Delay to spawn next piece
+    this.frameDelay = 0;
   }
 
   getGridData() {
@@ -32,13 +37,28 @@ class Game {
   // Ticks once per NES frame
   tick() {
     this.frameCount++;
-    this.frameCount %= _DATA.fps;
+    this.frameCount %= this.fps;
     
     // TODO Refactor
-    if (this.frameCount % 3 === 0) {
-      if (!this.tryMoveCurrentPieceDown()) {
-        this.grid.addPieceToData(this.currentPiece);
+    if (!this.spawnNextPiece) {
+      if (this.frameCount % 3 === 0) {
+        // Move piece down
+        if (!this.tryMoveCurrentPieceDown()) {
+          // If not successful, that means piece has landed
+          // Update grid
+          this.grid.addPieceToData(this.currentPiece);
+          // Prepare for next piece
+          this.frameDelay = this.nextPieceDelay;
+          this.spawnNextPiece = true;
+        }
+      }
+    } else {
+      // Handle delay before spawning next piece
+      if (this.frameDelay > 0) {
+        this.frameDelay--;
+      } else {
         this.currentPiece = new Piece(PieceID.T);
+        this.spawnNextPiece = false;
       }
     }
   }

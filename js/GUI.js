@@ -1,5 +1,20 @@
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+class Canvas {
+  constructor(id) {
+    this.element = document.getElementById(id);
+    this.ctx = this.element.getContext("2d");
+  }
+
+  get width() {
+    return this.element.width;
+  }
+
+  get height() {
+    return this.element.height;
+  }
+}
+
+const mainCanvas = new Canvas("canvas");
+const nextBoxCanvas = new Canvas("next-box");
 
 class GUI {
   static get controls() {
@@ -8,40 +23,53 @@ class GUI {
 
   static get cellSize() {
     return Math.min(
-      canvas.height / _DATA.grid.numRows,
-      canvas.width / _DATA.grid.numColumns
+      mainCanvas.height / _DATA.grid.numRows,
+      mainCanvas.width / _DATA.grid.numColumns
     );
   }
 
-  static drawRect(x, y, width, height, colour="#000") {
+  static drawRect(x, y, width, height, canvas, colour="#000") {
+    let ctx = canvas.ctx;
     ctx.save();
     ctx.fillStyle = colour;
     ctx.fillRect(x, y, width, height);
     ctx.restore();
   }
 
-  static drawBackground() {
-    GUI.drawRect(0, 0, canvas.width, canvas.height, _DATA.gui.gridColour);
-  }
+  // Helper function for drawing a 2D matrix
+  static drawMatrix(data, canvas, dim=GUI.cellSize) {
 
-  static drawGrid(game) {
-    const dim = GUI.cellSize;
-    const data = game.getGridData();
     // For each row
     for (let i = 0; i < data.length; i++) {
       // For each column
       for (let j = 0; j < data[i].length; j++) {
         const fill = data[i][j];
         if (fill !== 0) {
-          GUI.drawRect(j * dim, i * dim, dim, dim, _DATA.gui.pieceColours[fill]);
+          GUI.drawRect(j * dim, i * dim, dim, dim, canvas,
+                       _DATA.gui.pieceColours[fill]);
         }
       }
     }
   }
 
+  static drawBackground(canvas) {
+    GUI.drawRect(0, 0, canvas.width, canvas.height, canvas,
+                 _DATA.gui.gridColour);
+  }
+
+  static drawMain(game) {
+    GUI.drawBackground(mainCanvas);
+    GUI.drawMatrix(game.getGridData(), mainCanvas);
+  }
+
+  static drawNextBox(game) {
+    GUI.drawBackground(nextBoxCanvas);
+    GUI.drawMatrix(game.nextPiece.getShape(), nextBoxCanvas);
+  }
+
   static draw(game) {
-    GUI.drawBackground();
-    GUI.drawGrid(game);
+    GUI.drawMain(game);
+    GUI.drawNextBox(game);
   }
 
   static startEventHandlers(game) {

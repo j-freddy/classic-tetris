@@ -16,6 +16,7 @@ class Game {
   }
 
   getRandomPiece() {
+    // TODO 1/49 chance for 2 pieces in a row
     const sack = [PieceID.T, PieceID.J, PieceID.Z, PieceID.O];
     return new Piece(sack[Math.floor(Math.random() * sack.length)]);
   }
@@ -47,7 +48,7 @@ class Game {
     
     // TODO Refactor
     if (!this.spawnNextPiece) {
-      if (this.frameCount % 3 === 0) {
+      if (this.frameCount % 4 === 0) {
         // Move piece down
         if (!this.tryMoveCurrentPieceDown()) {
           // If not successful, that means piece has landed

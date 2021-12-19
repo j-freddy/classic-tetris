@@ -6,8 +6,29 @@ class Grid {
     this.data = this.getBlankData();
   }
 
+  getBlankRow() {
+    return Array(this.numColumns).fill(0);
+  }
+
   getBlankData() {
-    return Array(this.numRows).fill(Array(this.numColumns).fill(0));
+    return Array(this.numRows).fill(this.getBlankRow());
+  }
+
+  isRowFilled(row) {
+    for (let cell of row) {
+      if (cell === 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  removeFilledLines() {
+    this.data = this.data.filter(row => !this.isRowFilled(row));
+
+    while (this.data.length < this.numRows) {
+      this.data.unshift(this.getBlankRow());
+    }
   }
 
   getDataWithCurrentPiece(piece) {

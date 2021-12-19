@@ -12,7 +12,8 @@ class Game {
   }
 
   getGridData() {
-    return this.grid.getDataWithCurrentPiece(this.currentPiece);
+    return this.spawnNextPiece ?
+      this.grid.data : this.grid.getDataWithCurrentPiece(this.currentPiece);
   }
 
   getRandomPieceNaive() {
@@ -74,6 +75,8 @@ class Game {
       if (this.frameDelay > 0) {
         this.frameDelay--;
       } else {
+        // Clear filled lines
+        this.grid.removeFilledLines();
         this.currentPiece = this.nextPiece;
         this.nextPiece = this.getRandomPiece();
         this.spawnNextPiece = false;

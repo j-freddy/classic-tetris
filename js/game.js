@@ -3,7 +3,7 @@ class Game {
     this.fps = _DATA.fps;
     this.nextPieceDelay = _DATA.delay.nextPiece;
     this.grid = new Grid();
-    this.currentPiece = this.getRandomPiece();
+    this.currentPiece = this.getRandomPieceNaive();
     this.nextPiece = this.getRandomPiece();
     this.frameCount = 0;
     this.spawnNextPiece = false;
@@ -15,10 +15,20 @@ class Game {
     return this.grid.getDataWithCurrentPiece(this.currentPiece);
   }
 
-  getRandomPiece() {
-    // TODO 1/49 chance for 2 pieces in a row
+  getRandomPieceNaive() {
     const sack = _DATA.pieceIds;
     return new Piece(sack[Math.floor(Math.random() * sack.length)]);
+  }
+
+  // 1/49 chance to get same piece 2 times in a row
+  getRandomPiece(prevId=this.currentPiece.id) {
+    let piece = this.getRandomPieceNaive();
+
+    if (piece.id === prevId) {
+      piece = this.getRandomPieceNaive();
+    }
+
+    return piece;
   }
 
   tryMoveCurrentPieceDown() {

@@ -2,6 +2,7 @@ class Piece {
   constructor(id) {
     const p = _DATA.piece[id]
     this.data = p.data;
+    this.id = id;
     // Top left
     this.row = p.startRow;
     this.column = p.startColumn;

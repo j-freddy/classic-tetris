@@ -17,7 +17,7 @@ class Game {
 
   getRandomPiece() {
     // TODO 1/49 chance for 2 pieces in a row
-    const sack = [PieceID.T, PieceID.J, PieceID.Z, PieceID.O];
+    const sack = _DATA.pieceIds;
     return new Piece(sack[Math.floor(Math.random() * sack.length)]);
   }
 

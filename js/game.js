@@ -87,7 +87,7 @@ class Game {
         if (this.moveRightPressed) {
           this.tryMoveCurrentPiece(MoveDirection.RIGHT);
         }
-        this.DASCharge -= this.DASMoveDelay;
+        this.DASCharge -= this.DASMoveDelay + 1;
       }
     }
   }

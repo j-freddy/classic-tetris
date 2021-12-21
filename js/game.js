@@ -2,6 +2,7 @@ class Game {
   constructor() {
     this.fps = _DATA.fps;
     this.nextPieceDelay = _DATA.delay.nextPiece;
+    this.lineClearDelay = _DATA.delay.lineClear;
     this.grid = new Grid();
     this.currentPiece = this.getRandomPieceNaive();
     this.nextPiece = this.getRandomPiece();
@@ -57,7 +58,7 @@ class Game {
     this.frameCount++;
     this.frameCount %= this.fps;
     
-    // TODO Refactor
+    // TODO Refactor block drop speed
     if (!this.spawnNextPiece) {
       if (this.frameCount % 4 === 0) {
         // Move piece down
@@ -76,7 +77,15 @@ class Game {
         this.frameDelay--;
       } else {
         // Clear filled lines
-        this.grid.removeFilledLines();
+        if (this.grid.removeFilledLines()) {
+          // Emulate line clear animation with a delay
+          // Slightly inefficient: removeFilledLines() is called twice
+          // Called 2nd time after delay, but it does nothing
+          this.frameDelay = this.lineClearDelay;
+          return;
+        }
+
+        // Spawn next piece
         this.currentPiece = this.nextPiece;
         this.nextPiece = this.getRandomPiece();
         this.spawnNextPiece = false;

@@ -98,8 +98,8 @@ class Game {
     if (!this.spawnNextPiece) {
       this.pieceDropFrameCount++;
 
-      if (this.pieceDropFrameCount >= 4) {
-        this.pieceDropFrameCount -= 4;
+      if (this.pieceDropFrameCount >= _DATA.level[0].framesPerDrop) {
+        this.pieceDropFrameCount -= _DATA.level[0].framesPerDrop;
         // Move piece down
         if (!this.tryMoveCurrentPiece(MoveDirection.DOWN)) {
           // If not successful, that means piece has landed

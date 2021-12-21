@@ -38,16 +38,8 @@ class Game {
     return piece;
   }
 
-  tryMoveCurrentPieceDown() {
-    return this.currentPiece.tryMoveDown(this.grid);
-  }
-
-  tryMoveCurrentPieceLeft() {
-    return this.currentPiece.tryMoveLeft(this.grid);
-  }
-
-  tryMoveCurrentPieceRight() {
-    return this.currentPiece.tryMoveRight(this.grid);
+  tryMoveCurrentPiece(direction) {
+    return this.currentPiece.tryMove(this.grid, direction);
   }
 
   tryRotateCurrentPieceClockwise() {
@@ -63,14 +55,14 @@ class Game {
       this.moveLeftPressed = true;
       // This behaviour is inaccurate with respect to original game
       this.moveRightPressed = false;
-      this.tryMoveCurrentPieceLeft();
+      this.tryMoveCurrentPiece(MoveDirection.LEFT);
     }
 
     if (direction === MoveDirection.RIGHT) {
       this.moveRightPressed = true;
       // This behaviour is inaccurate with respect to original game
       this.moveLeftPressed = false;
-      this.tryMoveCurrentPieceRight();
+      this.tryMoveCurrentPiece(MoveDirection.RIGHT);
     }
 
     // Reset DAS, except during piece entry delay
@@ -79,6 +71,7 @@ class Game {
     }
   }
 
+  // Thanks to https://www.youtube.com/watch?v=JeccfAI_ujo
   handleDAS() {
     if (this.moveLeftPressed || this.moveRightPressed) {
       if (this.DASCharge < this.DASMaxCharge) {
@@ -89,10 +82,10 @@ class Game {
       } else {
         // DAS fully charged
         if (this.moveLeftPressed) {
-          this.tryMoveCurrentPieceLeft();
+          this.tryMoveCurrentPiece(MoveDirection.LEFT);
         }
         if (this.moveRightPressed) {
-          this.tryMoveCurrentPieceRight();
+          this.tryMoveCurrentPiece(MoveDirection.RIGHT);
         }
         this.DASCharge -= this.DASMoveDelay;
       }
@@ -101,7 +94,6 @@ class Game {
 
   // Ticks once per NES frame
   tick() {
-    console.log(this.pieceDropFrameCount);
     // TODO Refactor block drop speed
     if (!this.spawnNextPiece) {
       this.pieceDropFrameCount++;
@@ -109,7 +101,7 @@ class Game {
       if (this.pieceDropFrameCount >= 4) {
         this.pieceDropFrameCount -= 4;
         // Move piece down
-        if (!this.tryMoveCurrentPieceDown()) {
+        if (!this.tryMoveCurrentPiece(MoveDirection.DOWN)) {
           // If not successful, that means piece has landed
           // Update grid
           this.grid.addPieceToData(this.currentPiece);

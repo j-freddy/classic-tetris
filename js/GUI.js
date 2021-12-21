@@ -79,8 +79,6 @@ class GUI {
         return;
       }
 
-      console.log(e.code);
-
       if (e.code === GUI.controls.rotateClockwise) {
         game.tryRotateCurrentPieceClockwise();
       }

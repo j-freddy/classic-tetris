@@ -98,6 +98,12 @@ class Piece {
     return true;
   }
 
+  tryMove(grid, direction) {
+    if (direction === MoveDirection.DOWN) return this.tryMoveDown(grid);
+    if (direction === MoveDirection.LEFT) return this.tryMoveLeft(grid);
+    if (direction === MoveDirection.RIGHT) return this.tryMoveRight(grid);
+  }
+
   // Rotates clockwise and returns true if possible, otherwise returns false
   tryRotateClockwise(grid) {
     this.rotateClockwise();

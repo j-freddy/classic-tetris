@@ -11,8 +11,24 @@ const _DATA = {
   "delay": {
     // Inaccurate: see https://tetris.fandom.com/wiki/Tetris_(NES,_Nintendo)
     "nextPiece": 10,
-    "lineClear": 20
+    "lineClear": 20,
+    "DAS": {
+      "initial": 16,
+      "horizontal": 6
+    }
   },
+  // TODO
+  "level": [
+    {
+      "framesPerDrop": 4,
+      "score": {
+        "single": 0,
+        "double": 0,
+        "triple": 0,
+        "tetris": 0
+      }
+    }
+  ],
   "pieceIds": ["t", "j", "z", "o", "s", "l", "i"],
   "piece": {
     "t": {

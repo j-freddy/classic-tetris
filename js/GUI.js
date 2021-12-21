@@ -79,6 +79,8 @@ class GUI {
         return;
       }
 
+      console.log(e.code);
+
       if (e.code === GUI.controls.rotateClockwise) {
         game.tryRotateCurrentPieceClockwise();
       }
@@ -88,11 +90,21 @@ class GUI {
       }
 
       if (e.code === GUI.controls.moveLeft) {
-        game.tryMoveCurrentPieceLeft();
+        game.moveKeyPressed(MoveDirection.LEFT);
       }
 
       if (e.code === GUI.controls.moveRight) {
-        game.tryMoveCurrentPieceRight();
+        game.moveKeyPressed(MoveDirection.RIGHT);
+      }
+    });
+
+    document.addEventListener("keyup", e => {
+      if (e.code === GUI.controls.moveLeft) {
+        game.moveLeftPressed = false;
+      }
+
+      if (e.code === GUI.controls.moveRight) {
+        game.moveRightPressed = false;
       }
     });
   }

@@ -3,13 +3,18 @@ class Game {
     this.fps = _DATA.fps;
     this.nextPieceDelay = _DATA.delay.nextPiece;
     this.lineClearDelay = _DATA.delay.lineClear;
+    this.DASMaxCharge = _DATA.delay.DAS.initial;
+    this.DASMoveDelay = _DATA.delay.DAS.horizontal;
     this.grid = new Grid();
     this.currentPiece = this.getRandomPieceNaive();
     this.nextPiece = this.getRandomPiece();
-    this.frameCount = 0;
+    this.pieceDropFrameCount = 0;
     this.spawnNextPiece = false;
     // Delay to spawn next piece
     this.frameDelay = 0;
+    this.moveLeftPressed = false;
+    this.moveRightPressed = false;
+    this.DASCharge = 0;
   }
 
   getGridData() {
@@ -53,14 +58,56 @@ class Game {
     return this.currentPiece.tryRotateAntiClockwise(this.grid);
   }
 
+  moveKeyPressed(direction) {
+    if (direction === MoveDirection.LEFT) {
+      this.moveLeftPressed = true;
+      // This behaviour is inaccurate with respect to original game
+      this.moveRightPressed = false;
+      this.tryMoveCurrentPieceLeft();
+    }
+
+    if (direction === MoveDirection.RIGHT) {
+      this.moveRightPressed = true;
+      // This behaviour is inaccurate with respect to original game
+      this.moveLeftPressed = false;
+      this.tryMoveCurrentPieceRight();
+    }
+
+    // Reset DAS, except during piece entry delay
+    if (this.frameDelay === 0) {
+      this.DASCharge = 0;
+    }
+  }
+
+  handleDAS() {
+    if (this.moveLeftPressed || this.moveRightPressed) {
+      if (this.DASCharge < this.DASMaxCharge) {
+        // Charge DAS, except during piece entry delay
+        if (this.frameDelay === 0) {
+          this.DASCharge++;
+        }
+      } else {
+        // DAS fully charged
+        if (this.moveLeftPressed) {
+          this.tryMoveCurrentPieceLeft();
+        }
+        if (this.moveRightPressed) {
+          this.tryMoveCurrentPieceRight();
+        }
+        this.DASCharge -= this.DASMoveDelay;
+      }
+    }
+  }
+
   // Ticks once per NES frame
   tick() {
-    this.frameCount++;
-    this.frameCount %= this.fps;
-    
+    console.log(this.pieceDropFrameCount);
     // TODO Refactor block drop speed
     if (!this.spawnNextPiece) {
-      if (this.frameCount % 4 === 0) {
+      this.pieceDropFrameCount++;
+
+      if (this.pieceDropFrameCount >= 4) {
+        this.pieceDropFrameCount -= 4;
         // Move piece down
         if (!this.tryMoveCurrentPieceDown()) {
           // If not successful, that means piece has landed
@@ -91,5 +138,7 @@ class Game {
         this.spawnNextPiece = false;
       }
     }
+
+    this.handleDAS();
   }
 }

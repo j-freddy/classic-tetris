@@ -17,6 +17,23 @@ class Game {
     this.DASCharge = 0;
   }
 
+  init() {
+    // TODO refactor constructor to use init()
+    this.grid = new Grid();
+    this.currentPiece = this.getRandomPieceNaive();
+    this.nextPiece = this.getRandomPiece();
+    this.pieceDropFrameCount = 0;
+    this.spawnNextPiece = true;
+    this.frameDelay = 0;
+    this.moveLeftPressed = false;
+    this.moveRightPressed = false;
+    this.DASCharge = 0;
+  }
+
+  reset() {
+    this.init();
+  }
+
   getGridData() {
     return this.spawnNextPiece ?
       this.grid.data : this.grid.getDataWithCurrentPiece(this.currentPiece);
@@ -111,6 +128,10 @@ class Game {
     }
   }
 
+  handleTopOut() {
+    this.reset();
+  }
+
   // Ticks once per NES frame
   tick() {
     // TODO Refactor block drop speed
@@ -148,5 +169,9 @@ class Game {
     }
 
     this.handleDAS();
+
+    if (this.grid.isToppedOut()) {
+      this.handleTopOut();
+    }
   }
 }

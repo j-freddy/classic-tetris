@@ -23,6 +23,15 @@ class Grid {
     return true;
   }
 
+  isToppedOut() {
+    // ----XX----
+    // If either of the cells marked X is not empty, grid is topped out
+    let i = Math.floor(this.numColumns / 2);
+    let j = i + 1;
+    
+    return this.data[0][i] !== 0 || this.data[0][j] !== 0;
+  }
+
   // Returns true if lines are cleared, false otherwise
   removeFilledLines() {
     let lineClears = false;

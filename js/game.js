@@ -71,23 +71,42 @@ class Game {
     }
   }
 
+  updateForNextPiece() {
+    this.currentPiece = this.nextPiece;
+    this.nextPiece = this.getRandomPiece();
+    this.spawnNextPiece = false;
+
+    // Do not move piece via DAS during 1st frame of spawning piece
+    // From my observation
+    if (this.DASCharge = this.DASMaxCharge) {
+      this.DASCharge--;
+    }
+  }
+
   // Thanks to https://www.youtube.com/watch?v=JeccfAI_ujo
   handleDAS() {
     if (this.moveLeftPressed || this.moveRightPressed) {
       if (this.DASCharge < this.DASMaxCharge) {
-        // Charge DAS, except during piece entry delay
-        if (this.frameDelay === 0) {
-          this.DASCharge++;
-        }
+        this.DASCharge++;
       } else {
         // DAS fully charged
-        if (this.moveLeftPressed) {
-          this.tryMoveCurrentPiece(MoveDirection.LEFT);
+        if (this.frameDelay == 0) {
+          // Move piece if not waiting for next piece
+          if (this.moveLeftPressed) {
+            if (this.tryMoveCurrentPiece(MoveDirection.LEFT)) {
+              // Reset charge if move is successful
+              // Add 1 to DAS charge to compensate current frame
+              this.DASCharge -= this.DASMoveDelay - 1;
+            }
+          }
+          if (this.moveRightPressed) {
+            if (this.tryMoveCurrentPiece(MoveDirection.RIGHT)) {
+              // Reset charge if move is successful
+              // Add 1 to DAS charge to compensate current frame
+              this.DASCharge -= this.DASMoveDelay - 1;
+            }
+          }
         }
-        if (this.moveRightPressed) {
-          this.tryMoveCurrentPiece(MoveDirection.RIGHT);
-        }
-        this.DASCharge -= this.DASMoveDelay + 1;
       }
     }
   }
@@ -124,10 +143,7 @@ class Game {
           return;
         }
 
-        // Spawn next piece
-        this.currentPiece = this.nextPiece;
-        this.nextPiece = this.getRandomPiece();
-        this.spawnNextPiece = false;
+        this.updateForNextPiece();
       }
     }
 

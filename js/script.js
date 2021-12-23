@@ -14,7 +14,6 @@ function update(game) {
 }
 
 window.onload = () => {
-  console.log("Hello world!");
   const game = new Game();
   GUI.startEventHandlers(game);
   update(game);

@@ -20,7 +20,7 @@ const _DATA = {
   // TODO
   "level": [
     {
-      "framesPerDrop": 4,
+      "framesPerDrop": 3,
       "score": {
         "single": 0,
         "double": 0,

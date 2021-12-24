@@ -28,11 +28,15 @@ class Game {
     this.DASCharge = 0;
   }
 
-  init() {
+  init(level) {
     // TODO refactor constructor to use init()
     this.grid = new Grid();
     this.currentPiece = this.getRandomPieceNaive();
     this.nextPiece = this.getRandomPiece();
+    this.level = level;
+    this.score = 0;
+    this.lineClears = 0;
+    this.prevLineClears = 0;
     this.pieceDropFrameCount = 0;
     this.spawnNextPiece = true;
     this.frameDelay = 0;
@@ -42,7 +46,8 @@ class Game {
   }
 
   reset() {
-    this.init();
+    // TODO
+    this.init(18);
   }
 
   getGridData() {

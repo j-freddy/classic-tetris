@@ -1,13 +1,20 @@
 class Game {
-  constructor() {
+  constructor(level) {
+    /* DATA */
     this.fps = _DATA.fps;
     this.nextPieceDelay = _DATA.delay.nextPiece;
     this.lineClearDelay = _DATA.delay.lineClear;
     this.DASMaxCharge = _DATA.delay.DAS.initial;
     this.DASMoveDelay = _DATA.delay.DAS.horizontal;
+
+    /* OBJECTS */
     this.grid = new Grid();
     this.currentPiece = this.getRandomPieceNaive();
     this.nextPiece = this.getRandomPiece();
+
+    /* OTHER */
+    this.level = level;
+    this.score = 0;
     this.pieceDropFrameCount = 0;
     this.spawnNextPiece = false;
     // Delay to spawn next piece
@@ -37,6 +44,10 @@ class Game {
   getGridData() {
     return this.spawnNextPiece ?
       this.grid.data : this.grid.getDataWithCurrentPiece(this.currentPiece);
+  }
+
+  getFramesPerDrop() {
+    return _DATA.level[this.level].framesPerDrop;
   }
 
   getRandomPieceNaive() {
@@ -138,8 +149,8 @@ class Game {
     if (!this.spawnNextPiece) {
       this.pieceDropFrameCount++;
 
-      if (this.pieceDropFrameCount >= _DATA.level[0].framesPerDrop) {
-        this.pieceDropFrameCount -= _DATA.level[0].framesPerDrop;
+      if (this.pieceDropFrameCount >= this.getFramesPerDrop()) {
+        this.pieceDropFrameCount -= this.getFramesPerDrop();
         // Move piece down
         if (!this.tryMoveCurrentPiece(MoveDirection.DOWN)) {
           // If not successful, that means piece has landed

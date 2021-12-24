@@ -14,7 +14,7 @@ function update(game) {
 }
 
 window.onload = () => {
-  const game = new Game();
+  const game = new Game(18);
   GUI.startEventHandlers(game);
   update(game);
 }

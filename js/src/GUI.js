@@ -16,6 +16,17 @@ class Canvas {
 const mainCanvas = new Canvas("canvas");
 const nextBoxCanvas = new Canvas("next-box");
 
+// TODO Update
+const levelElement = document.getElementById("level");
+const lineClearsElement = document.getElementById("line-clears");
+const scoreElement = document.getElementById("score");
+
+function tempInterface(game) {
+  levelElement.innerHTML = "Level: " + game.level;
+  lineClearsElement.innerHTML = "Line clears: " + game.lineClears;
+  scoreElement.innerHTML = "Score: " + game.score;
+}
+
 class GUI {
   static get controls() {
     return _DATA.controls;
@@ -70,6 +81,9 @@ class GUI {
   static draw(game) {
     GUI.drawMain(game);
     GUI.drawNextBox(game);
+
+    // TODO Update interface for statistics
+    tempInterface(game);
   }
 
   static startEventHandlers(game) {

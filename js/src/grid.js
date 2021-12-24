@@ -34,12 +34,12 @@ class Grid {
 
   // Returns true if lines are cleared, false otherwise
   removeFilledLines() {
-    let lineClears = false;
+    let lineClears = 0;
     this.data = this.data.filter(row => !this.isRowFilled(row));
 
     while (this.data.length < this.numRows) {
       this.data.unshift(this.getBlankRow());
-      lineClears = true;
+      lineClears++;
     }
 
     return lineClears;

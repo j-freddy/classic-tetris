@@ -6,6 +6,8 @@ class Game {
     this.lineClearDelay = _DATA.delay.lineClear;
     this.DASMaxCharge = _DATA.delay.DAS.initial;
     this.DASMoveDelay = _DATA.delay.DAS.horizontal;
+    this.levelData = _DATA.level;
+    this.scoring = _DATA.scoring;
 
     /* OBJECTS */
     this.grid = new Grid();
@@ -15,6 +17,8 @@ class Game {
     /* OTHER */
     this.level = level;
     this.score = 0;
+    this.lineClears = 0;
+    this.prevLineClears = 0;
     this.pieceDropFrameCount = 0;
     this.spawnNextPiece = false;
     // Delay to spawn next piece
@@ -46,8 +50,12 @@ class Game {
       this.grid.data : this.grid.getDataWithCurrentPiece(this.currentPiece);
   }
 
+  currentLevelData() {
+    return this.levelData[this.level];
+  }
+
   getFramesPerDrop() {
-    return _DATA.level[this.level].framesPerDrop;
+    return this.currentLevelData().framesPerDrop;
   }
 
   getRandomPieceNaive() {
@@ -64,6 +72,24 @@ class Game {
     }
 
     return piece;
+  }
+
+  getScore(lines) {
+    if (lines === 0) {
+      return 0;
+    }
+
+    let rawScore;
+    if (lines === 1) rawScore = this.scoring.single;
+    if (lines === 2) rawScore = this.scoring.double;
+    if (lines === 3) rawScore = this.scoring.triple;
+    if (lines === 4) rawScore = this.scoring.tetris;
+
+    return rawScore * (this.level + 1)
+  }
+
+  handleTopOut() {
+    this.reset();
   }
 
   tryMoveCurrentPiece(direction) {
@@ -111,6 +137,12 @@ class Game {
     }
   }
 
+  updateRegardingLineClears() {
+    this.lineClears += this.prevLineClears;
+    this.score += this.getScore(this.prevLineClears);
+    this.prevLineClears = 0;
+  }
+
   // Thanks to https://www.youtube.com/watch?v=JeccfAI_ujo
   handleDAS() {
     if (this.moveLeftPressed || this.moveRightPressed) {
@@ -139,10 +171,6 @@ class Game {
     }
   }
 
-  handleTopOut() {
-    this.reset();
-  }
-
   // Ticks once per NES frame
   tick() {
     // TODO Refactor block drop speed
@@ -167,14 +195,19 @@ class Game {
         this.frameDelay--;
       } else {
         // Clear filled lines
-        if (this.grid.removeFilledLines()) {
+        let lineCount = this.grid.removeFilledLines();
+
+        if (lineCount > 0) {
           // Emulate line clear animation with a delay
           // Slightly inefficient: removeFilledLines() is called twice
           // Called 2nd time after delay, but it does nothing
           this.frameDelay = this.lineClearDelay;
+          // Store temporarily as we will update after frame delay
+          this.prevLineClears = lineCount;
           return;
         }
 
+        this.updateRegardingLineClears();
         this.updateForNextPiece();
       }
     }

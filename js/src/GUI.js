@@ -13,19 +13,22 @@ class Canvas {
   }
 }
 
+class Text {
+  constructor(id) {
+    this.element = document.getElementById(id);
+  }
+
+  update(text) {
+    this.element.innerHTML = text;
+  }
+}
+
 const mainCanvas = new Canvas("canvas");
 const nextBoxCanvas = new Canvas("next-box");
 
-// TODO Update
-const levelElement = document.getElementById("level");
-const lineClearsElement = document.getElementById("line-clears");
-const scoreElement = document.getElementById("score");
-
-function tempInterface(game) {
-  levelElement.innerHTML = "Level: " + game.level;
-  lineClearsElement.innerHTML = "Line clears: " + game.lineClears;
-  scoreElement.innerHTML = "Score: " + game.score;
-}
+const levelElement = new Text("level");
+const lineClearsElement = new Text("line-clears");
+const scoreElement = new Text("score");
 
 class GUI {
   static get controls() {
@@ -81,9 +84,12 @@ class GUI {
   static draw(game) {
     GUI.drawMain(game);
     GUI.drawNextBox(game);
+  }
 
-    // TODO Update interface for statistics
-    tempInterface(game);
+  static updateTextInterface(game) {
+    levelElement.update(game.level);
+    lineClearsElement.update(game.lineClears);
+    scoreElement.update(game.score);
   }
 
   static startEventHandlers(game) {

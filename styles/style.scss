@@ -1,0 +1,30 @@
+$theme-dark-0: #171b1f;
+$theme-dark-1: #212529;
+$theme-light-1: #ced4da;
+
+html, body {
+  background-color: $theme-dark-0;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-weight: bold;
+  color: $theme-light-1;
+}
+
+canvas {
+  display: block;
+}
+
+#game-container {
+  .sub-container {
+    margin: 0 1em 0 1em;
+    border: 2px solid $theme-light-1;
+  }
+
+  #side-container {
+    padding: 1em;
+    font-size: 1.2em;
+
+    #stats-container {
+      margin-bottom: 1em;
+    }
+  }
+}

@@ -1,0 +1,25 @@
+html, body {
+  background-color: #171b1f;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-weight: bold;
+  color: #ced4da;
+}
+
+canvas {
+  display: block;
+}
+
+#game-container .sub-container {
+  margin: 0 1em 0 1em;
+  border: 2px solid #ced4da;
+}
+
+#game-container #side-container {
+  padding: 1em;
+  font-size: 1.2em;
+}
+
+#game-container #side-container #stats-container {
+  margin-bottom: 1em;
+}
+/*# sourceMappingURL=style.css.map */

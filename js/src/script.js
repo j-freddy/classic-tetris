@@ -8,6 +8,7 @@ function update(game) {
   if (frameCount % framesPerUpdate === 0) {
     game.tick();
     GUI.draw(game);
+    GUI.updateTextInterface(game);
   }
 
   requestAnimationFrame(() => update(game));

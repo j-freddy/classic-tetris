@@ -2,6 +2,7 @@ class Game {
   constructor(level) {
     /* DATA */
     this.fps = _DATA.fps;
+    this.initialDelay = _DATA.delay.initial;
     this.nextPieceDelay = _DATA.delay.nextPiece;
     this.lineClearDelay = _DATA.delay.lineClear;
     this.DASMaxCharge = _DATA.delay.DAS.initial;
@@ -21,8 +22,10 @@ class Game {
     this.prevLineClears = 0;
     this.pieceDropFrameCount = 0;
     this.spawnNextPiece = false;
+    this.isStart = true;
     // Delay to spawn next piece
     this.frameDelay = 0;
+    this.initialFrameDelay = this.initialDelay;
     this.moveLeftPressed = false;
     this.moveRightPressed = false;
     this.DASCharge = 0;
@@ -39,7 +42,9 @@ class Game {
     this.prevLineClears = 0;
     this.pieceDropFrameCount = 0;
     this.spawnNextPiece = true;
+    this.isStart = true;
     this.frameDelay = 0;
+    this.initialFrameDelay = this.initialDelay;
     this.moveLeftPressed = false;
     this.moveRightPressed = false;
     this.DASCharge = 0;
@@ -178,7 +183,17 @@ class Game {
 
   // Ticks once per NES frame
   tick() {
-    // TODO Refactor block drop speed
+    // Handle initial delay of first piece
+    if (this.isStart) {
+      if (this.initialFrameDelay <= 0) {
+        this.isStart = false;
+      } else {
+        this.initialFrameDelay--;
+        this.handleDAS();
+        return;
+      }
+    }
+
     if (!this.spawnNextPiece) {
       this.pieceDropFrameCount++;
 

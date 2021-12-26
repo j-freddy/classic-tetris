@@ -9,8 +9,11 @@ const _DATA = {
   },
   "fps": 60,
   "delay": {
+    // Inaccurate
+    "initial": 60,
     // Inaccurate: see https://tetris.fandom.com/wiki/Tetris_(NES,_Nintendo)
     "nextPiece": 10,
+    // Inaccurate
     "lineClear": 20,
     "DAS": {
       "initial": 16,
